@@ -7,7 +7,7 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _templates;
     [SerializeField] private float _startSecondBetweenSpawn;
-    [SerializeField] Score _score;
+    [SerializeField] private Score _score;
     [SerializeField] private Player _player;
 
     private float _secondBetweenSpawnDecrease = 1.1f;

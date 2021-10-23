@@ -11,10 +11,7 @@ public class SwipeZone : MonoBehaviour
     [SerializeField] private int _angleOfRotationToUp;
     [SerializeField] private int _angleOfRotationToDown;
 
-    private bool _isCubeUp = false;
-    private bool _isCubeDown = false;
-    private bool _isCubeLeft = false;
-    private bool _isCubeRight = false;
+    private ÑubeDirection _cubeDirection;
     private GameObject _currentCube;
     private Transform _currentCubeTransform;
 
@@ -41,31 +38,27 @@ public class SwipeZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _isCubeUp = false;
-        _isCubeDown = false;
-        _isCubeLeft = false;
-        _isCubeRight = false;
-
-        if (other.GetComponent<CubeUp>() != null)
+        if (other.TryGetComponent(out CubeUp _cubeUp) )
         {
-            _isCubeUp = true;
+            _cubeDirection = ÑubeDirection.Up;
             _currentCube = other.gameObject;
         }
 
-        if (other.GetComponent<CubeDown>() != null)
+        if (other.TryGetComponent(out CubeDown _cubeDown))
         {
-            _isCubeDown = true;
-            _currentCube = other.gameObject;
-        }
-        if (other.GetComponent<CubeLeft>() != null)
-        {
-            _isCubeLeft = true;
+            _cubeDirection = ÑubeDirection.Down;
             _currentCube = other.gameObject;
         }
 
-        if (other.GetComponent<CubeRight>() != null)
+        if (other.TryGetComponent(out CubeLeft _cubeLeft))
         {
-            _isCubeRight = true;
+            _cubeDirection = ÑubeDirection.Left;
+            _currentCube = other.gameObject;
+        }
+
+        if (other.TryGetComponent(out CubeRight _cubeRight))
+        {
+            _cubeDirection = ÑubeDirection.Right;
             _currentCube = other.gameObject;
         }
     }
@@ -77,7 +70,7 @@ public class SwipeZone : MonoBehaviour
 
     private void OnSwipedUp()
     {
-        if(_isCubeUp == true)
+        if(_cubeDirection == ÑubeDirection.Up)
         {
             ImplementSwipe(_angleOfRotationToUp);
         }
@@ -85,7 +78,7 @@ public class SwipeZone : MonoBehaviour
 
     private void OnSwipedDown()
     {
-        if (_isCubeDown == true)
+        if (_cubeDirection == ÑubeDirection.Down)
         {
             ImplementSwipe(_angleOfRotationToDown);
 
@@ -93,7 +86,7 @@ public class SwipeZone : MonoBehaviour
     }
     private void OnSwipedRight()
     {
-        if (_isCubeRight == true)
+        if (_cubeDirection == ÑubeDirection.Right)
         {
             ImplementSwipe(_angleOfRotationToRight);
 
@@ -102,7 +95,7 @@ public class SwipeZone : MonoBehaviour
 
     private void OnSwipedLeft()
     {
-        if (_isCubeLeft == true)
+        if (_cubeDirection == ÑubeDirection.Left)
         {
             ImplementSwipe(_angleOfRotationToLeft);
         }
@@ -114,5 +107,14 @@ public class SwipeZone : MonoBehaviour
         _currentCubeTransform = _currentCube.transform;
         CubeDestroyed?.Invoke(_currentCubeTransform.position,angleOfRotation);
         Destroy(_currentCube);
+        
     }
+}
+
+public enum ÑubeDirection
+{
+    Up,
+    Down,
+    Left,
+    Right
 }

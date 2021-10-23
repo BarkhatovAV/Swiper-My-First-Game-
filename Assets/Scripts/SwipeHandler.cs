@@ -27,39 +27,70 @@ public class SwipeHandler : MonoBehaviour
     {
         if (!_isMobile)
         {
-            if (Input.GetMouseButtonDown(0))
+            TrackMouseClick();
+        }
+        else
+        {
+            TrackTouch();
+        }
+
+        RecognizeSwipe();
+    }
+
+    private void TrackMouseClick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _isSwiping = true;
+            _tapPosition = Input.mousePosition;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            ResetSwipe();
+        }
+    }
+
+    private void TrackTouch()
+    {
+        if (Input.touchCount > 0)
+        {
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 _isSwiping = true;
-                _tapPosition = Input.mousePosition;
+                _tapPosition = Input.GetTouch(0).position;
             }
-            else if (Input.GetMouseButtonUp(0))
+            else if (Input.GetTouch(0).phase == TouchPhase.Canceled || Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 ResetSwipe();
             }
         }
-        else
-        {
-            if (Input.touchCount > 0)
-            {
-                if (Input.GetTouch(0).phase == TouchPhase.Began)
-                {
-                    _isSwiping = true;
-                    _tapPosition = Input.GetTouch(0).position;
-                }
-                else if (Input.GetTouch(0).phase == TouchPhase.Canceled || Input.GetTouch(0).phase == TouchPhase.Ended)
-                {
-                    ResetSwipe();
-                }
-            }
-        }
-
-        CheckSwipe();
     }
 
-    private void CheckSwipe()
+    private void RecognizeSwipe()
     {
-        _swipeDelta = Vector2.zero;
-        if(_isSwiping)
+        UpdateSwipeDeltaValue();
+
+        if (_swipeDelta.magnitude > _deadZone)
+        {
+            if (Mathf.Abs(_swipeDelta.x) > Mathf.Abs(_swipeDelta.y))
+            {
+                if(_swipeDelta.x > 0) SwipedRight?.Invoke();
+                else SwipedLeft?.Invoke(); 
+            }
+            else
+            {
+                if(_swipeDelta.y > 0) SwipedUp?.Invoke();
+                else SwipedDown?.Invoke();
+            }
+            ResetSwipe();
+        }
+    }
+
+    private void UpdateSwipeDeltaValue()
+    {
+        _swipeDelta = Vector2.zero; 
+
+        if (_isSwiping)
         {
             if (!_isMobile && Input.GetMouseButton(0))
             {
@@ -71,34 +102,7 @@ public class SwipeHandler : MonoBehaviour
             }
         }
 
-        if (_swipeDelta.magnitude > _deadZone)
-        {
-            if (Mathf.Abs(_swipeDelta.x) > Mathf.Abs(_swipeDelta.y))
-            {
-                if (_swipeDelta.x > 0)
-                {
-                    SwipedRight?.Invoke();
-                }
-                else
-                {
-                    SwipedLeft?.Invoke();
-                }
-            }
-            else
-            {
-                if (_swipeDelta.y > 0)
-                {
-                    SwipedUp?.Invoke();
-                }
-                else
-                {
-                    SwipedDown?.Invoke();
-                }
-            }
-            ResetSwipe();
-        }
     }
-
     private void ResetSwipe()
     {
         _isSwiping = false;

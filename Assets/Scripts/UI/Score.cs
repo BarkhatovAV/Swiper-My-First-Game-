@@ -12,7 +12,6 @@ public class Score : MonoBehaviour
     private int _currentScore;
 
     public event UnityAction<int> ScoreChanged;
-    public event UnityAction DifficultyChanged;
 
     private void OnEnable()
     {
