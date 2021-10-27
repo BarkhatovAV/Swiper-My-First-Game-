@@ -11,7 +11,6 @@ public class DifficultyDisplay : MonoBehaviour
     
     private float _minDificulty;
     private float _maxDificulty;
-    private float _currentDificulty;
 
     private void OnEnable()
     {

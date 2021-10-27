@@ -24,14 +24,4 @@ public class Cube : MonoBehaviour
     {
         _renderer.material.color = _startColor;
     }
-
-    public void ChangeColorToStart()
-    {
-        _renderer.material.color = _startColor;
-    }
-
-    public void ChangeColorToTriggered()
-    {
-        _renderer.material.color = _changedColor;
-    }
 }
