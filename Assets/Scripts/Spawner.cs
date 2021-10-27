@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _templates;
-    [SerializeField] private readonly float _startSecondBetweenSpawn;
+    [SerializeField] private float _startSecondBetweenSpawn;
     [SerializeField] private Score _score;
     [SerializeField] private Player _player;
 
